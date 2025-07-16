@@ -2,7 +2,8 @@
 
 import { useForm } from "react-hook-form";
 import { BoardType, Task } from "./TrelloBoard";
-import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, FC, SetStateAction, useEffect, useRef, useState } from "react";
+import TaskItem from "./TaskItem";
 
 const Board: FC<{
   board: BoardType;
@@ -17,6 +18,7 @@ const Board: FC<{
   } = useForm<Task>();
 
   const [addNewTask, setAddNewTask] = useState<boolean>(false);
+  const [editTask, setEditTask] = useState<boolean>(false);
 
   const handleAddTask = (data: Task, boardId: number) => {
     let getBoards = boards;
@@ -35,6 +37,26 @@ const Board: FC<{
     resetTask();
   };
 
+  const boardRef = useRef<any>(null)
+
+  const handleEditTask = (taskData: Task, board: BoardType) => {
+    let getBoards = [...boards];
+    let getBoardsById = getBoards.findIndex((brd) => brd.id  == board.id)
+    let boardTasks = [...getBoards[getBoardsById].tasks]
+    let boardTaskId = boardTasks.findIndex(bt => bt.id == taskData.id)
+    boardTasks[boardTaskId] = {
+      ...boardTasks[boardTaskId],
+      ...taskData
+    }
+    getBoards[getBoardsById] = {
+      ...getBoards[getBoardsById],
+      tasks: boardTasks
+    }
+    setBoards(getBoards)
+    
+    boardRef.current.resetEditTask()
+  };
+
   useEffect(() => {
     if (!addNewTask) resetTask();
   }, [addNewTask]);
@@ -47,12 +69,13 @@ const Board: FC<{
         </header>
         <div className="task-container h-[calc(100%-calc(2*3.6rem))] my-2 flex flex-col gap-2">
           {board.tasks?.map((task) => (
-            <div
-              className="task p-[0.5rem] rounded-lg bg-neutral-600 text-neutral-300 text-[1.6rem]"
+            <TaskItem
               key={task.id}
-            >
-              {task.task}
-            </div>
+              task={task}
+              handleEditTask={handleEditTask}
+              board={board}
+              ref={boardRef}
+            />
           ))}
         </div>
         <div className="footer">
