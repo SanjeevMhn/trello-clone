@@ -25,7 +25,7 @@ const Board: FC<{
     let getBoardsById = getBoards.findIndex((board) => board.id == boardId);
     let boardTasks: Array<Task> = getBoards[getBoardsById].tasks || [];
     boardTasks.push({
-      id: getBoards.length + 1,
+      id: Date.now(),
       task: data.task,
     });
     getBoards[getBoardsById] = {
@@ -57,6 +57,21 @@ const Board: FC<{
     boardRef.current.resetEditTask()
   };
 
+  const handleDeleteTask = (taskData: Task, board: BoardType) => {
+    let getBoards = [...boards];
+    let getBoardsById = getBoards.findIndex((brd) => brd.id  == board.id)
+    let boardTasks = [...getBoards[getBoardsById].tasks]
+
+    boardTasks = boardTasks.filter(bt => bt.id !== taskData.id)
+    getBoards[getBoardsById] = {
+      ...getBoards[getBoardsById],
+      tasks: boardTasks
+    }
+    setBoards(getBoards)
+    
+    boardRef.current.resetEditTask()
+  };
+
   useEffect(() => {
     if (!addNewTask) resetTask();
   }, [addNewTask]);
@@ -73,6 +88,7 @@ const Board: FC<{
               key={task.id}
               task={task}
               handleEditTask={handleEditTask}
+              handleDeleteTask={handleDeleteTask}
               board={board}
               ref={boardRef}
             />
