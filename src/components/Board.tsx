@@ -4,12 +4,13 @@ import { useForm } from "react-hook-form";
 import { BoardType, Task } from "./TrelloBoard";
 import { Dispatch, FC, SetStateAction, useEffect, useRef, useState } from "react";
 import TaskItem from "./TaskItem";
+import { useDragDrop } from "@/providers/DragDropProvider";
 
 const Board: FC<{
   board: BoardType;
   setBoards: Dispatch<SetStateAction<Array<BoardType>>>;
   boards: Array<BoardType>;
-}> = ({ board, setBoards, boards }) => {
+}> = ({ board, setBoards, boards}) => {
   const {
     register: registerTask,
     handleSubmit: handleTaskSubmit,
@@ -76,8 +77,10 @@ const Board: FC<{
     if (!addNewTask) resetTask();
   }, [addNewTask]);
 
+  const { handleOnDrop } = useDragDrop()
+
   return (
-    <div className="board">
+    <div className="board" onDragOver={(e) => e.preventDefault()} onDrop={() => handleOnDrop(board)}>
       <div className="board-data bg-neutral-800 rounded-xl p-[0.5rem] h-auto">
         <header className="title capitalize text-white border-b-2 p-[0.5rem_0] border-white">
           {board.name}

@@ -56,6 +56,8 @@ const TaskItem = forwardRef<
     <div
       className="task p-[0.5rem] rounded-lg bg-neutral-600 text-neutral-300 text-[1.6rem] cursor-pointer group"
       key={task.id}
+      draggable
+      onDragOver={(e) => e.preventDefault()}
     >
       {!editTask ? (
         <div className="flex items-center gap-2">
