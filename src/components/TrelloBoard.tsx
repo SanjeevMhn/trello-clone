@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import Board from "./Board";
+import { useDragDrop } from "@/providers/DragDropProvider";
 
 type User = {
   id: number | string;
@@ -23,7 +24,8 @@ export type BoardType = {
 };
 
 const TrelloBoard = () => {
-  const [boards, setBoards] = useState<Array<BoardType>>([]);
+  // const [boards, setBoards] = useState<Array<BoardType>>([]);
+  const { boards, setBoards } = useDragDrop()
 
   const [addNewBoard, setAddNewBoard] = useState(false);
   const {

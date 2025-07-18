@@ -8,6 +8,7 @@ import {
 import { BoardType, Task } from "./TrelloBoard";
 import { useForm } from "react-hook-form";
 import CustomAlertDialog from "./CustomAlertDialog";
+import { useDragDrop } from "@/providers/DragDropProvider";
 
 const TaskItem = forwardRef<
   { resetEditTask: () => void },
@@ -52,12 +53,15 @@ const TaskItem = forwardRef<
     values: task,
   });
 
+  const { handleOnDragStart } = useDragDrop()
+
   return (
     <div
       className="task p-[0.5rem] rounded-lg bg-neutral-600 text-neutral-300 text-[1.6rem] cursor-pointer group"
       key={task.id}
       draggable
       onDragOver={(e) => e.preventDefault()}
+      onDragStart={(e) => handleOnDragStart(task, board)}
     >
       {!editTask ? (
         <div className="flex items-center gap-2">

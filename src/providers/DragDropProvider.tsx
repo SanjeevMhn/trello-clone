@@ -1,9 +1,18 @@
+"use client";
 import { BoardType, Task } from "@/components/TrelloBoard";
-import { createContext, useContext, useState } from "react";
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useState,
+} from "react";
 
 type DragDropContextType = {
   dragStartItem: Task | null;
-  handleOnDragStart: (task: Task) => void;
+  boards: Array<BoardType>;
+  setBoards: Dispatch<SetStateAction<Array<BoardType>>>;
+  handleOnDragStart: (task: Task, board: BoardType) => void;
   handleOnDrop: (board: BoardType) => void;
 };
 
@@ -21,19 +30,34 @@ export default function DragDropProvider({
   children: React.ReactNode;
 }) {
   const [dragStartItem, setDragStartItem] = useState<Task | null>(null);
+  const [dragStartBoard, setDragStartBoard] = useState<BoardType | null>(null);
+  const [boards, setBoards] = useState<Array<BoardType>>([]);
 
-  const handleOnDragStart = (task: Task) => {
+  const handleOnDragStart = (task: Task, board: BoardType) => {
     setDragStartItem(task);
+    setDragStartBoard(board);
   };
 
   const handleOnDrop = (board: BoardType) => {
-    console.log(dragStartItem, board);
+
+    let getBoards = [...boards];
+    let getFromBoard = getBoards.findIndex((bd) => bd.id == dragStartBoard!.id);
+    let getToBoard = getBoards.findIndex((bd) => bd.id == board.id);
+
+    getBoards[getFromBoard].tasks = getBoards[getFromBoard].tasks.filter((ts) => ts.id !== dragStartItem!.id);
+    getBoards[getToBoard].tasks.push(dragStartItem!);
+
+    setBoards(getBoards)
+    setDragStartItem(null)
+    setDragStartBoard(null)
   };
 
   const dragDropContextValue: DragDropContextType = {
     dragStartItem,
     handleOnDragStart,
     handleOnDrop,
+    boards,
+    setBoards,
   };
   return (
     <DragDropContext.Provider value={dragDropContextValue}>
