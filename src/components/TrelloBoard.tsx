@@ -25,7 +25,7 @@ export type BoardType = {
 
 const TrelloBoard = () => {
   // const [boards, setBoards] = useState<Array<BoardType>>([]);
-  const { boards, setBoards } = useDragDrop()
+  const { boards, setBoards } = useDragDrop();
 
   const [addNewBoard, setAddNewBoard] = useState(false);
   const {
@@ -38,7 +38,10 @@ const TrelloBoard = () => {
   }>();
 
   const handleAddBoard = (data: { name: string }) => {
-    setBoards([...boards, { id: boards.length + 1, name: data.name, tasks: [] }]);
+    setBoards([
+      ...boards,
+      { id: boards.length + 1, name: data.name, tasks: [] },
+    ]);
     setAddNewBoard(false);
     resetBoardState();
   };
@@ -49,6 +52,15 @@ const TrelloBoard = () => {
     }
   }, [addNewBoard]);
 
+  useEffect(() => {
+    let keypress: any;
+    keypress = document.addEventListener("keydown", (e: KeyboardEvent) => {
+      if (e.key == "Escape") {
+        resetBoardState();
+        setAddNewBoard(false);
+      }
+    });
+  }, [addNewBoard]);
 
   return (
     <div className="wrapper bg-blue-200 h-[calc(100vh-7rem)]">
