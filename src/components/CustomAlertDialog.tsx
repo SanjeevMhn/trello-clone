@@ -20,7 +20,7 @@ const CustomAlertDialog: FC<{
 }> = ({ trigger, title, description, onAction }) => {
   return (
     <AlertDialog>
-      <AlertDialogTrigger>{trigger}</AlertDialogTrigger>
+      <AlertDialogTrigger className="w-full">{trigger}</AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>

@@ -51,7 +51,7 @@ const TrelloBoard = () => {
 
 
   return (
-    <div className="wrapper overflow-y-auto bg-blue-200 h-[calc(100vh-7rem)]">
+    <div className="wrapper bg-blue-200 h-[calc(100vh-7rem)]">
       <main
         className="trello-board-main p-[2rem] grid gap-5 h-auto"
         style={{
