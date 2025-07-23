@@ -24,8 +24,8 @@ import CustomAlertDialog from "./CustomAlertDialog";
 
 const Board: FC<{
   board: BoardType;
-  setBoards: Dispatch<SetStateAction<Array<BoardType>>>;
-  boards: Array<BoardType>;
+  setBoards?: Dispatch<SetStateAction<Array<BoardType>>>;
+  boards?: Array<BoardType>;
 }> = ({ board, setBoards, boards }) => {
   const {
     register: registerTask,
@@ -38,7 +38,7 @@ const Board: FC<{
   const [editTask, setEditTask] = useState<boolean>(false);
 
   const handleAddTask = (data: Task, boardId: number) => {
-    let getBoards = boards;
+    let getBoards = boards!;
     let getBoardsById = getBoards.findIndex((board) => board.id == boardId);
     let boardTasks: Array<Task> = getBoards[getBoardsById].tasks || [];
     boardTasks.push({
@@ -49,7 +49,7 @@ const Board: FC<{
       ...getBoards[getBoardsById],
       tasks: boardTasks,
     };
-    setBoards(getBoards);
+    if(setBoards) setBoards(getBoards);
     setAddNewTask(false);
     resetTask();
   };
@@ -57,7 +57,7 @@ const Board: FC<{
   const boardRef = useRef<any>(null);
 
   const handleEditTask = (taskData: Task, board: BoardType) => {
-    let getBoards = [...boards];
+    let getBoards = [...boards!];
     let getBoardsById = getBoards.findIndex((brd) => brd.id == board.id);
     let boardTasks = [...getBoards[getBoardsById].tasks];
     let boardTaskId = boardTasks.findIndex((bt) => bt.id == taskData.id);
@@ -69,13 +69,13 @@ const Board: FC<{
       ...getBoards[getBoardsById],
       tasks: boardTasks,
     };
-    setBoards(getBoards);
+    if(setBoards)setBoards(getBoards);
 
     boardRef.current.resetEditTask();
   };
 
   const handleDeleteTask = (taskData: Task, board: BoardType) => {
-    let getBoards = [...boards];
+    let getBoards = [...boards!];
     let getBoardsById = getBoards.findIndex((brd) => brd.id == board.id);
     let boardTasks = [...getBoards[getBoardsById].tasks];
 
@@ -84,7 +84,7 @@ const Board: FC<{
       ...getBoards[getBoardsById],
       tasks: boardTasks,
     };
-    setBoards(getBoards);
+    if(setBoards) setBoards(getBoards);
 
     boardRef.current.resetEditTask();
   };
@@ -151,7 +151,7 @@ const Board: FC<{
       <div className="board-data bg-neutral-800 rounded-xl p-[0.5rem] h-auto">
         <header className="border-b-2 p-[0.5rem_0] border-white flex items-center justify-between">
           {!editBoardTitle ? (
-            <span className="title-text title capitalize text-white">
+            <span className="title-text title capitalize text-white" data-testid="board-header-text">
               {board.name}
             </span>
           ) : (
@@ -245,6 +245,7 @@ const Board: FC<{
               type="button"
               className="p-[0.5rem] pt-[0.8rem] rounded-lg bg-neutral-800 text-white w-full flex items-center gap-[1rem] hover:bg-neutral-600"
               onClick={() => setAddNewTask(true)}
+              data-testid="add-task"
             >
               <span className="icon-container w-[1.8rem] h-[1.8rem] flex items-center justify-center">
                 <svg
@@ -283,6 +284,7 @@ const Board: FC<{
                       message: "Task Title must be atleast 2 characters long",
                     },
                   })}
+                  data-testid="add-task-input"
                 />
                 {taskErrors.task && (
                   <span className="text-red-300 pt-3 flex">

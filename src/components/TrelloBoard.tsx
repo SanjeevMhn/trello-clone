@@ -42,7 +42,7 @@ const TrelloBoard = () => {
       ...boards,
       { id: boards.length + 1, name: data.name, tasks: [] },
     ]);
-    setAddNewBoard(false);
+    // setAddNewBoard(false);
     resetBoardState();
   };
 
