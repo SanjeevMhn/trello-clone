@@ -227,7 +227,7 @@ const Board: FC<{
             </DropdownMenuContent>
           </DropdownMenu>
         </header>
-        <div className="task-container h-[calc(100%-calc(2*3.6rem))] my-2 flex flex-col gap-2">
+        <div className="task-container h-[calc(100%-calc(2*3.6rem))] my-2 flex flex-col gap-2" data-testid="taskContainer">
           {board.tasks?.map((task) => (
             <TaskItem
               key={task.id}
@@ -280,8 +280,8 @@ const Board: FC<{
                       message: "Task Title Required",
                     },
                     minLength: {
-                      value: 2,
-                      message: "Task Title must be atleast 2 characters long",
+                      value: 4,
+                      message: "Task Title must be atleast 4 characters long",
                     },
                   })}
                   data-testid="add-task-input"
@@ -296,6 +296,7 @@ const Board: FC<{
                 <button
                   type="submit"
                   className="bg-blue-400 p-[0.5rem] rounded-md text-[1.4rem] cursor-pointer"
+                  data-testid="submit-btn"
                 >
                   Add Task
                 </button>
