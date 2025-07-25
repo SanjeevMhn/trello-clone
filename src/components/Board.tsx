@@ -187,7 +187,7 @@ const Board: FC<{
           )}
 
           <DropdownMenu>
-            <DropdownMenuTrigger>
+            <DropdownMenuTrigger data-testid="dropdownBtn">
               <span className="icon-container w-[2.8rem] h-[2.8rem] flex items-center justify-center rounded-sm hover:bg-neutral-600">
                 <svg
                   className="w-1/2 h-1/2 fill-white"
@@ -198,7 +198,7 @@ const Board: FC<{
                 </svg>
               </span>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="bg-neutral-700 text-white">
+            <DropdownMenuContent forceMount className="bg-neutral-700 text-white" data-testid="dropdown-content">
               <DropdownMenuLabel>List Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem
@@ -304,6 +304,7 @@ const Board: FC<{
                   type="button"
                   className="w-[3rem] h-[3rem] flex items-center justify-center cursor-pointer"
                   onClick={() => setAddNewTask(false)}
+                  data-testid="close-btn"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
